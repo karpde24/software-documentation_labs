@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Список кандидатів</title>
+</head>
+<body>
+    <h1>Список кандидатів</h1>
+
+    <p>
+        <a href="/candidates/create">Додати кандидата</a>
+    </p>
+
+    <table border="1" cellpadding="8" cellspacing="0">
+        <tr>
+            <th>ID</th>
+            <th>ПІБ</th>
+            <th>Email</th>
+            <th>Бажана позиція</th>
+            <th>Навички</th>
+            <th>Оцінка</th>
+            <th>Рекомендований</th>
+            <th>Дії</th>
+        </tr>
+
+        {% for candidate in candidates %}
+        <tr>
+            <td>{{ candidate.id }}</td>
+            <td>{{ candidate.full_name }}</td>
+            <td>{{ candidate.email }}</td>
+            <td>{{ candidate.desired_position }}</td>
+            <td>{{ candidate.skills }}</td>
+            <td>{{ candidate.technical_score }}</td>
+            <td>
+                {% if candidate.is_recommended %}
+                    Так
+                {% else %}
+                    Ні
+                {% endif %}
+            </td>
+            <td>
+                <a href="/candidates/{{ candidate.id }}">Деталі</a> |
+                <a href="/candidates/edit/{{ candidate.id }}">Редагувати</a> |
+
+                <form action="/candidates/delete/{{ candidate.id }}" method="post" style="display:inline;">
+                    <button type="submit">Видалити</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <p>
+        <a href="/">На головну</a>
+    </p>
+</body>
+</html>
