@@ -1,0 +1,14 @@
+﻿{
+  "output_strategy": "file",
+  "dataset_url": "https://www.dallasopendata.com/resource/rtn4-pmj9.json?$limit=20",
+  "output_file": "output/revenue_budget_output.json",
+  "redis": {
+    "host": "localhost",
+    "port": 6379,
+    "key": "revenue_budget"
+  },
+  "kafka": {
+    "bootstrap_servers": "localhost:9092",
+    "topic": "revenue_budget"
+  }
+}

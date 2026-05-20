@@ -1,0 +1,202 @@
+[
+    {
+        "bfy": "2025",
+        "ftyp": "DSGO",
+        "fundtype": "General Obligation Debt Service",
+        "department": "Office of Budget and Management Services",
+        "rsrc": "6001",
+        "revsource": "Prop.Taxs-Real Est-Current",
+        "budcurr": "410201835.00",
+        "revbfy": "407900570.35"
+    },
+    {
+        "bfy": "2025",
+        "ftyp": "DSGO",
+        "fundtype": "General Obligation Debt Service",
+        "department": "Office of Budget and Management Services",
+        "rsrc": "6002",
+        "revsource": "Prop.Taxs-Rl Est-Pr Rolls",
+        "budcurr": "-2364435.00",
+        "revbfy": "-2570841.42"
+    },
+    {
+        "bfy": "2025",
+        "ftyp": "DSGO",
+        "fundtype": "General Obligation Debt Service",
+        "department": "Office of Budget and Management Services",
+        "rsrc": "6007",
+        "revsource": "Prop.Taxs-Penalty & Interest",
+        "budcurr": "2708151.00",
+        "revbfy": "3157778.81"
+    },
+    {
+        "bfy": "2025",
+        "ftyp": "DSGO",
+        "fundtype": "General Obligation Debt Service",
+        "department": "Office of Budget and Management Services",
+        "rsrc": "8013",
+        "revsource": "Part Pay Installment Fee City",
+        "budcurr": "0.00",
+        "revbfy": "0.00"
+    },
+    {
+        "bfy": "2025",
+        "ftyp": "DSGO",
+        "fundtype": "General Obligation Debt Service",
+        "department": "Office of Budget and Management Services",
+        "rsrc": "8100",
+        "revsource": "Interest On Pooled Invest-Cash",
+        "budcurr": "0.00",
+        "revbfy": "6473852.25"
+    },
+    {
+        "bfy": "2025",
+        "ftyp": "DSGO",
+        "fundtype": "General Obligation Debt Service",
+        "department": "Office of Budget and Management Services",
+        "rsrc": "8103",
+        "revsource": "Interest-Miscelleaneous",
+        "budcurr": "0.00",
+        "revbfy": "137235.90"
+    },
+    {
+        "bfy": "2025",
+        "ftyp": "DSGO",
+        "fundtype": "General Obligation Debt Service",
+        "department": "Office of Budget and Management Services",
+        "rsrc": "8104",
+        "revsource": "Accrued Interest On Poold Inv",
+        "budcurr": "0.00",
+        "revbfy": "178616.99"
+    },
+    {
+        "bfy": "2025",
+        "ftyp": "DSGO",
+        "fundtype": "General Obligation Debt Service",
+        "department": "Office of Budget and Management Services",
+        "rsrc": "8116",
+        "revsource": "Amortized Discount/Premium Int",
+        "budcurr": "0.00",
+        "revbfy": "1707499.15"
+    },
+    {
+        "bfy": "2025",
+        "ftyp": "DSGO",
+        "fundtype": "General Obligation Debt Service",
+        "department": "Office of Budget and Management Services",
+        "rsrc": "8125",
+        "revsource": "Interest On Pooled Invest-Coup",
+        "budcurr": "500000.00",
+        "revbfy": "0.00"
+    },
+    {
+        "bfy": "2025",
+        "ftyp": "DSGO",
+        "fundtype": "General Obligation Debt Service",
+        "department": "Office of Budget and Management Services",
+        "rsrc": "8428",
+        "revsource": "Misc-Misc Revenue",
+        "budcurr": "0.00",
+        "revbfy": "3996.02"
+    },
+    {
+        "bfy": "2025",
+        "ftyp": "DSGO",
+        "fundtype": "General Obligation Debt Service",
+        "department": "Office of Budget and Management Services",
+        "rsrc": "8519",
+        "revsource": "Insurance Recovery",
+        "budcurr": "8000000.00",
+        "revbfy": "0.00"
+    },
+    {
+        "bfy": "2025",
+        "ftyp": "DSGO",
+        "fundtype": "General Obligation Debt Service",
+        "department": "Office of Budget and Management Services",
+        "rsrc": "8525",
+        "revsource": "Liability Reserve",
+        "budcurr": "760014.00",
+        "revbfy": "0.00"
+    },
+    {
+        "bfy": "2025",
+        "ftyp": "DSGO",
+        "fundtype": "General Obligation Debt Service",
+        "department": "Office of Budget and Management Services",
+        "rsrc": "8585",
+        "revsource": "Revenue-GO 2010B BABS Subsidy",
+        "budcurr": "0.00",
+        "revbfy": "757039.68"
+    },
+    {
+        "bfy": "2025",
+        "ftyp": "DSGO",
+        "fundtype": "General Obligation Debt Service",
+        "department": "Office of Budget and Management Services",
+        "rsrc": "9201",
+        "revsource": "Intfd Rev-Tran Fr Othr Fds-Rev",
+        "budcurr": "26779765.00",
+        "revbfy": "27306542.04"
+    },
+    {
+        "bfy": "2025",
+        "ftyp": "DSGO",
+        "fundtype": "General Obligation Debt Service",
+        "department": "Office of Budget and Management Services",
+        "rsrc": "9204",
+        "revsource": "Interfund Transfer-Pension Obligation Bond",
+        "budcurr": "18942958.00",
+        "revbfy": "19046442.31"
+    },
+    {
+        "bfy": "2025",
+        "ftyp": "DSGO",
+        "fundtype": "General Obligation Debt Service",
+        "department": "Office of Budget and Management Services",
+        "rsrc": "R114",
+        "revsource": "Gain/Loss Sale Of Investment",
+        "budcurr": "0.00",
+        "revbfy": "-40776.19"
+    },
+    {
+        "bfy": "2025",
+        "ftyp": "EFOP",
+        "fundtype": "Enterprise Operating Fund",
+        "department": "Aviation",
+        "rsrc": "7219",
+        "revsource": "Chgs Serv-Bldg Use Fee",
+        "budcurr": "0.00",
+        "revbfy": "0.00"
+    },
+    {
+        "bfy": "2025",
+        "ftyp": "EFOP",
+        "fundtype": "Enterprise Operating Fund",
+        "department": "Aviation",
+        "rsrc": "7277",
+        "revsource": "Chg Serv-Interest On Del Accts",
+        "budcurr": "0.00",
+        "revbfy": "96.07"
+    },
+    {
+        "bfy": "2025",
+        "ftyp": "EFOP",
+        "fundtype": "Enterprise Operating Fund",
+        "department": "Aviation",
+        "rsrc": "7437",
+        "revsource": "Facility Maintenance Charge-Tenants",
+        "budcurr": "0.00",
+        "revbfy": "43800.00"
+    },
+    {
+        "bfy": "2025",
+        "ftyp": "EFOP",
+        "fundtype": "Enterprise Operating Fund",
+        "department": "Aviation",
+        "rsrc": "7550",
+        "revsource": "Service Charge Nsf Checks",
+        "budcurr": "0.00",
+        "revbfy": "30.00"
+    }
+]
