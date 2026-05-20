@@ -1,151 +1,197 @@
-import csv
-import random
-import os
-from abc import ABC, abstractmethod
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
-from faker import Faker
+from flask import Flask, jsonify
+from flask_cors import CORS
+from flasgger import Swagger
+import sqlite3
 
-# ==========================================
-# 0. МОДЕЛІ ДАНИХ (Діаграма класів з Лаб 1)
-# ==========================================
-Base = declarative_base()
+app = Flask(__name__)
+CORS(app)
 
-class Vacancy(Base):
-    __tablename__ = 'vacancies'
-    id = Column(Integer, primary_key=True)
-    title = Column(String)
+swagger = Swagger(app)
 
-class Candidate(Base):
-    __tablename__ = 'candidates'
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    email = Column(String, unique=True)
+DATABASE = "cornerstone_lab.db"
 
-class InterviewResult(Base):
-    __tablename__ = 'interview_results'
-    id = Column(Integer, primary_key=True)
-    score = Column(Float)
-    feedback = Column(String)
-    candidate_id = Column(Integer, ForeignKey('candidates.id'))
-    vacancy_id = Column(Integer, ForeignKey('vacancies.id'))
 
-# ==========================================
-# 1. РІВЕНЬ ДОСТУПУ ДО ДАНИХ (DAL)
-# ==========================================
-class IRepository(ABC):
-    @abstractmethod
-    def read_csv(self, file_path): pass
-    
-    @abstractmethod
-    def save_record(self, v_title, c_name, c_email, score, feedback): pass
+def get_db_connection():
+    conn = sqlite3.connect(DATABASE)
+    conn.row_factory = sqlite3.Row
+    return conn
 
-class SqlAlchemyRepository(IRepository):
-    def __init__(self, session):
-        self.session = session
 
-    def read_csv(self, file_path):
-        with open(file_path, mode='r', encoding='utf-8') as f:
-            return list(csv.DictReader(f))
+@app.route("/")
+def home():
+    return """
+    <h1>Cornerstone Recruiting API</h1>
+    <p>API для лабораторної роботи №2 працює.</p>
 
-    def save_record(self, v_title, c_name, c_email, score, feedback):
-        # Логіка для коректного збереження (перевірка на існуючі записи)
-        vacancy = self.session.query(Vacancy).filter_by(title=v_title).first()
-        if not vacancy:
-            vacancy = Vacancy(title=v_title)
-            self.session.add(vacancy)
-            self.session.flush()
+    <h3>Доступні посилання:</h3>
+    <ul>
+        <li><a href="/apidocs">Swagger documentation</a></li>
+        <li><a href="/api/tables">Переглянути таблиці бази даних</a></li>
+        <li><a href="/api/candidates">Список кандидатів</a></li>
+        <li><a href="/api/vacancies">Список вакансій</a></li>
+        <li><a href="/api/interviews">Результати інтерв'ю</a></li>
+    </ul>
+    """
 
-        candidate = self.session.query(Candidate).filter_by(email=c_email).first()
-        if not candidate:
-            candidate = Candidate(name=c_name, email=c_email)
-            self.session.add(candidate)
-            self.session.flush()
 
-        result = InterviewResult(
-            score=float(score), 
-            feedback=feedback, 
-            candidate_id=candidate.id, 
-            vacancy_id=vacancy.id
-        )
-        self.session.add(result)
-        self.session.commit()
+@app.route("/api/tables", methods=["GET"])
+def get_tables():
+    """
+    Get all database tables
+    ---
+    tags:
+      - Database
+    responses:
+      200:
+        description: List of database tables
+    """
+    conn = get_db_connection()
+    tables = conn.execute(
+        "SELECT name FROM sqlite_master WHERE type='table';"
+    ).fetchall()
+    conn.close()
 
-# ==========================================
-# 2. РІВЕНЬ БІЗНЕС-ЛОГІКИ (BLL)
-# ==========================================
-class IRecruitingService(ABC):
-    @abstractmethod
-    def import_data_from_csv(self, file_path): pass
+    return jsonify([row["name"] for row in tables])
 
-class RecruitingService(IRecruitingService):
-    def __init__(self, repository: IRepository):
-        # Впровадження залежності (DI) через інтерфейс
-        self.repository = repository
 
-    def import_data_from_csv(self, file_path):
-        print(f"BLL: Початок обробки файлу {file_path}...")
-        raw_rows = self.repository.read_csv(file_path)
-        
-        for row in raw_rows:
-            self.repository.save_record(
-                row['vacancy_title'],
-                row['candidate_name'],
-                row['candidate_email'],
-                row['tech_score'],
-                row['feedback']
-            )
-        print(f"BLL: Успішно імпортовано {len(raw_rows)} записів.")
+@app.route("/api/candidates", methods=["GET"])
+def get_candidates():
+    """
+    Get all candidates
+    ---
+    tags:
+      - Candidates
+    responses:
+      200:
+        description: List of candidates
+    """
+    conn = get_db_connection()
 
-# ==========================================
-# 3. ПРЕЗЕНТАЦІЙНИЙ РІВЕНЬ (Тільки інтерфейс)
-# ==========================================
-class IRecruitingView(ABC):
-    @abstractmethod
-    def render(self): pass
+    try:
+        candidates = conn.execute("SELECT * FROM candidates").fetchall()
+        result = [dict(row) for row in candidates]
+        return jsonify(result)
+    except sqlite3.Error as e:
+        return jsonify({
+            "error": "Cannot read candidates table",
+            "details": str(e),
+            "hint": "Check table name using /api/tables"
+        }), 500
+    finally:
+        conn.close()
 
-# ==========================================
-# 4. МОДУЛЬ ГЕНЕРАЦІЇ ДАНИХ (CLI)
-# ==========================================
-class DataGenerator:
-    @staticmethod
-    def create_csv(filename="data.csv", rows=1000):
-        fake = Faker()
-        with open(filename, mode='w', newline='', encoding='utf-8') as f:
-            writer = csv.writer(f)
-            writer.writerow(['vacancy_title', 'candidate_name', 'candidate_email', 'tech_score', 'feedback'])
-            for _ in range(rows):
-                writer.writerow([
-                    fake.job(), fake.name(), fake.unique.email(),
-                    random.randint(0, 100), fake.sentence()
-                ])
-        print(f"Генератор: Створено файл {filename} з {rows} рядками.")
 
-# ==========================================
-# 5. ТОЧКА ВХОДУ ТА IoC КОНТЕКСТ
-# ==========================================
+@app.route("/api/candidates/<int:candidate_id>", methods=["GET"])
+def get_candidate(candidate_id):
+    """
+    Get candidate by ID
+    ---
+    tags:
+      - Candidates
+    parameters:
+      - name: candidate_id
+        in: path
+        type: integer
+        required: true
+        description: Candidate ID
+    responses:
+      200:
+        description: Candidate data
+      404:
+        description: Candidate not found
+    """
+    conn = get_db_connection()
+
+    try:
+        candidate = conn.execute(
+            "SELECT * FROM candidates WHERE id = ?",
+            (candidate_id,)
+        ).fetchone()
+
+        if candidate is None:
+            return jsonify({"error": "Candidate not found"}), 404
+
+        return jsonify(dict(candidate))
+    except sqlite3.Error as e:
+        return jsonify({
+            "error": "Cannot read candidate",
+            "details": str(e),
+            "hint": "Check table name and column id"
+        }), 500
+    finally:
+        conn.close()
+
+
+@app.route("/api/vacancies", methods=["GET"])
+def get_vacancies():
+    """
+    Get all vacancies
+    ---
+    tags:
+      - Vacancies
+    responses:
+      200:
+        description: List of vacancies
+    """
+    conn = get_db_connection()
+
+    try:
+        vacancies = conn.execute("SELECT * FROM vacancies").fetchall()
+        result = [dict(row) for row in vacancies]
+        return jsonify(result)
+    except sqlite3.Error as e:
+        return jsonify({
+            "error": "Cannot read vacancies table",
+            "details": str(e),
+            "hint": "Check table name using /api/tables"
+        }), 500
+    finally:
+        conn.close()
+
+
+@app.route("/api/interviews", methods=["GET"])
+def get_interviews():
+    """
+    Get all interview results
+    ---
+    tags:
+      - Interviews
+    responses:
+      200:
+        description: List of interview results
+    """
+    conn = get_db_connection()
+
+    try:
+        interviews = conn.execute("SELECT * FROM interview_results").fetchall()
+        result = [dict(row) for row in interviews]
+        return jsonify(result)
+    except sqlite3.Error as e:
+        return jsonify({
+            "error": "Cannot read interview_results table",
+            "details": str(e),
+            "hint": "Check table name using /api/tables"
+        }), 500
+    finally:
+        conn.close()
+
+
+@app.route("/api/health", methods=["GET"])
+def health_check():
+    """
+    Check API status
+    ---
+    tags:
+      - System
+    responses:
+      200:
+        description: API status
+    """
+    return jsonify({
+        "status": "ok",
+        "message": "Cornerstone Recruiting API is running"
+    })
+
+
 if __name__ == "__main__":
-    import sys
-
-    # Команда для генерації: python main.py --generate
-    if len(sys.argv) > 1 and sys.argv[1] == "--generate":
-        DataGenerator.create_csv("recruiting_data.csv", 1000)
-    else:
-        # 1. Ініціалізація БД (DAL)
-        engine = create_engine('sqlite:///cornerstone_lab.db')
-        Base.metadata.create_all(engine)
-        Session = sessionmaker(bind=engine)
-        db_session = Session()
-
-        # 2. IoC/DI: Збірка шарів
-        # Створюємо репозиторій, впроваджуємо сесію БД
-        repo = SqlAlchemyRepository(db_session)
-        
-        # Створюємо сервіс, впроваджуємо репозиторій через інтерфейс
-        service = RecruitingService(repository=repo)
-
-        # 3. Запуск процесу
-        if os.path.exists("recruiting_data.csv"):
-            service.import_data_from_csv("recruiting_data.csv")
-        else:
-            print("Помилка: Файл 'recruiting_data.csv' не знайдено. Запустіть спочатку з флагом --generate")
+    app.run(host="0.0.0.0", port=5000, debug=True)
