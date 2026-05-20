@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Деталі кандидата</title>
+</head>
+<body>
+    <h1>Деталі кандидата</h1>
+
+    <p><strong>ID:</strong> {{ candidate.id }}</p>
+    <p><strong>ПІБ:</strong> {{ candidate.full_name }}</p>
+    <p><strong>Email:</strong> {{ candidate.email }}</p>
+    <p><strong>Бажана позиція:</strong> {{ candidate.desired_position }}</p>
+    <p><strong>Навички:</strong> {{ candidate.skills }}</p>
+    <p><strong>Досвід:</strong> {{ candidate.experience }}</p>
+
+    <p>
+        <strong>Резюме:</strong>
+        <a href="{{ candidate.resume_url }}" target="_blank">
+            {{ candidate.resume_url }}
+        </a>
+    </p>
+
+    <p><strong>Відгук після інтерв'ю:</strong> {{ candidate.interview_feedback }}</p>
+    <p><strong>Технічна оцінка:</strong> {{ candidate.technical_score }}</p>
+
+    <p>
+        <strong>Рекомендований:</strong>
+        {% if candidate.is_recommended %}
+            Так
+        {% else %}
+            Ні
+        {% endif %}
+    </p>
+
+    <p>
+        <a href="/candidates/edit/{{ candidate.id }}">Редагувати</a> |
+        <a href="/candidates">Назад до списку</a>
+    </p>
+</body>
+</html>
