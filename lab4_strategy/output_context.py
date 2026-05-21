@@ -3,4 +3,4 @@
         self.strategy = strategy
 
     def execute(self, data):
-        self.strategy.output(data)
+        return self.strategy.output(data)

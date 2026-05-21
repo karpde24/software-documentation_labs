@@ -1,0 +1,3 @@
+__pycache__/
+*.pyc
+lab4_strategy/firebase_service_account.json

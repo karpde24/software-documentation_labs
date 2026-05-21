@@ -18,4 +18,4 @@ class KafkaOutputStrategy:
         producer.flush()
         producer.close()
 
-        print(f"Data was written to Kafka topic: {self.topic}")
+        return f"Data was written to Kafka topic: {self.topic}"

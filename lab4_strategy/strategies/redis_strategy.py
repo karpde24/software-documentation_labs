@@ -18,4 +18,4 @@ class RedisOutputStrategy:
 
         client.set(self.key, json.dumps(data, ensure_ascii=False))
 
-        print(f"Data was written to Redis with key: {self.key}")
+        return f"Data was written to Redis with key: {self.key}"

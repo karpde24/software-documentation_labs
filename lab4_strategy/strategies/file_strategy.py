@@ -15,4 +15,4 @@ class FileOutputStrategy:
         with open(self.file_path, "w", encoding="utf-8") as file:
             json.dump(data, file, indent=4, ensure_ascii=False)
 
-        print(f"Data was written to file: {self.file_path}")
+        return f"Data was written to file: {self.file_path}"
